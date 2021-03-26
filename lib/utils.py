@@ -106,6 +106,7 @@ def get_sample_indices(data_sequence, num_of_weeks, num_of_days, num_of_hours,
 
     week_sample = np.concatenate([data_sequence[i: j]
                                   for i, j in week_indices], axis=0)
+    # print("week_sample shape:", week_sample.shape)
     day_sample = np.concatenate([data_sequence[i: j]
                                  for i, j in day_indices], axis=0)
     hour_sample = np.concatenate([data_sequence[i: j]

@@ -112,14 +112,17 @@ class MSTGCN_block(nn.Block):
 
         # cheb gcn
         spatial_gcn = self.cheb_conv(x)
+        # print("spatial_gcn shape: ", spatial_gcn.shape)
 
         # convolution along time axis
-        time_conv_output = (self.time_conv(spatial_gcn.transpose((0, 2, 1, 3))
-                            .transpose((0, 2, 1, 3))))
+        time_conv_output = (self.time_conv(spatial_gcn.transpose((0, 2, 1, 3)))
+                            .transpose((0, 2, 1, 3)))
 
         # residual shortcut
         x_residual = (self.residual_conv(x.transpose((0, 2, 1, 3)))
                       .transpose((0, 2, 1, 3)))
+        # print("time_conv_output shape: ", time_conv_output.shape)
+        # print("x_residual shape: ", x_residual.shape)
 
         return self.ln(nd.relu(x_residual + time_conv_output))
 

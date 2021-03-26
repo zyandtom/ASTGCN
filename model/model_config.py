@@ -22,13 +22,13 @@ def get_backbones(config_filename, adj_filename, ctx):
     cheb_polynomials = [nd.array(i, ctx=ctx)
                         for i in cheb_polynomial(L_tilde, K)]
 
-    sub_backbones = {
-        "K": K,
-        "num_of_chev_filters": 64,
-        "num_of_time_filters": 64,
-        "time_conv_strides": 1,
-        "cheb_polynomials": cheb_polynomials
-    }
+    # sub_backbones = {
+    #     "K": K,
+    #     "num_of_chev_filters": 64,
+    #     "num_of_time_filters": 64,
+    #     "time_conv_strides": 1,
+    #     "cheb_polynomials": cheb_polynomials
+    # }
     backbones1 = [
         {
             "K": K,
@@ -80,10 +80,10 @@ def get_backbones(config_filename, adj_filename, ctx):
         }
     ]
 
-    for i in range(27):
-        backbones1.append(sub_backbones)
-        backbones2.append(sub_backbones)
-        backbones3.append(sub_backbones)
+    # for i in range(11):
+    #     backbones1.append(sub_backbones)
+    #     backbones2.append(sub_backbones)
+    #     backbones3.append(sub_backbones)
 
     all_backbones = [
         backbones1,

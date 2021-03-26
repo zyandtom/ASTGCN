@@ -15,7 +15,7 @@ from mxnet import gluon
 from mxnet import autograd
 from mxboard import SummaryWriter
 
-from lib.utils import compute_val_loss, evaluate, predict
+from lib.utils import *
 from lib.data_preparation import read_and_generate_dataset
 from model.model_config import get_backbones
 
@@ -225,7 +225,34 @@ if __name__ == "__main__":
         compute_val_loss(net, val_loader, loss_function, sw, epoch)
 
         # evaluate the model on testing set
-        evaluate(net, test_loader, true_value, num_of_vertices, sw, epoch)
+        # evaluate(net, test_loader, true_value, num_of_vertices, sw, epoch)
+        prediction = predict(net, test_loader)
+        print("prediction shape:", prediction.shape)
+        prediction = (prediction.transpose((0, 2, 1))
+                      .reshape(prediction.shape[0], -1))
+        for i in [3, 6, 12]:
+            print('current epoch: %s, predict %s points' % (epoch, i))
+
+            mae = mean_absolute_error(true_value[:, : i * num_of_vertices],
+                                      prediction[:, : i * num_of_vertices])
+            rmse = mean_squared_error(true_value[:, : i * num_of_vertices],
+                                      prediction[:, : i * num_of_vertices]) ** 0.5
+            mape = masked_mape_np(true_value[:, : i * num_of_vertices],
+                                  prediction[:, : i * num_of_vertices], 0)
+
+            print('MAE: %.2f' % (mae))
+            print('RMSE: %.2f' % (rmse))
+            print('MAPE: %.2f' % (mape))
+            print()
+
+        if 'prediction_filename' in training_config:
+            prediction_path = os.path.join('result_mstgcn', training_config['prediction_filename'] + '_epoch%s'%(epoch))
+
+            np.savez_compressed(
+                os.path.normpath(prediction_path),
+                prediction=prediction,
+                ground_truth=true_value
+            )
 
         params_filename = os.path.join(params_path,
                                        '%s_epoch_%s.params' % (model_name,
@@ -236,13 +263,4 @@ if __name__ == "__main__":
     # close SummaryWriter
     sw.close()
 
-    if 'prediction_filename' in training_config:
-        prediction_path = training_config['prediction_filename']
 
-        prediction = predict(net, test_loader)
-
-        np.savez_compressed(
-            os.path.normpath(prediction_path),
-            prediction=prediction,
-            ground_truth=all_data['test']['target']
-        )

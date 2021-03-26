@@ -257,6 +257,7 @@ class ASTGCN_block(nn.Block):
         # cheb gcn with spatial attention
         spatial_At = self.SAt(x_TAt)
         spatial_gcn = self.cheb_conv_SAt(x, spatial_At)
+        # print("spatial_gcn shape: ", spatial_gcn.shape)
 
         # convolution along time axis
         time_conv_output = (self.time_conv(spatial_gcn.transpose((0, 2, 1, 3)))
@@ -265,7 +266,8 @@ class ASTGCN_block(nn.Block):
         # residual shortcut
         x_residual = (self.residual_conv(x.transpose((0, 2, 1, 3)))
                       .transpose((0, 2, 1, 3)))
-
+        # print("time_conv_output shape: ", time_conv_output.shape)
+        # print("x_residual shape: ", x_residual.shape)
         return self.ln(nd.relu(x_residual + time_conv_output))
 
 

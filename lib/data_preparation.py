@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 import numpy as np
-import mxnet as mx
 
 from .utils import get_sample_indices
 
@@ -75,6 +74,7 @@ def read_and_generate_dataset(graph_signal_matrix_filename,
             continue
 
         week_sample, day_sample, hour_sample, target = sample
+        # print("after change: ", np.expand_dims(week_sample, axis=0).transpose((0, 2, 3, 1)).shape)
         all_samples.append((
             np.expand_dims(week_sample, axis=0).transpose((0, 2, 3, 1)),
             np.expand_dims(day_sample, axis=0).transpose((0, 2, 3, 1)),
