@@ -2,8 +2,6 @@
 
 Attention Based Spatial-Temporal Graph Convolutional Networks for Traffic Flow Forecasting (ASTGCN)
 
-![model architecture](figures/model.png)
-
 # References
 
 [Shengnan Guo, Youfang Lin, Ning Feng, Chao Song, Huaiyu Wan(*). Attention Based Spatial-Temporal Graph Convolutional Networks for Traffic Flow Forecasting. The 33rd AAAI Conference on Artificial Intelligence (AAAI'19) 2019.](https://github.com/Davidham3/ASTGCN/blob/master/papers/2019%20AAAI_Attention%20Based%20Spatial-Temporal%20Graph%20Convolutional%20Networks%20for%20Traffic%20Flow%20Forecasting.pdf)
@@ -43,15 +41,6 @@ Other dependencies can be installed using the following command:
 pip install -r requirements.txt
 ```
 
-If you are using docker, install [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) and run the commands below:
-```bash
-# build image
-docker build -t astgcn/mxnet:1.4.1_cu100_mkl_py35 -f docker/Dockerfile .
-
-# training model in background
-docker run -d -it --rm --runtime=nvidia -v $PWD:/mxnet --name astgcn astgcn/mxnet:1.4.1_cu100_mkl_py35 python3 train.py --config configurations/PEMS04.conf --force True
-```
-
 # Usage
 
 train model on PEMS04:
@@ -70,9 +59,6 @@ tensorboard --logdir logs --port 6006
 ```
 then open [http://127.0.0.1:6006](http://127.0.0.1:6006) to visualize the training process.
 
-# Improvements
-
-1. We use convolutional operation to map the output of ASTGCN block to the label space because that can help the model achieve a better performance.
 
 # Configuration
 
